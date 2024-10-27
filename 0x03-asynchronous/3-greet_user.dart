@@ -1,13 +1,11 @@
-import 'dart:convert';
 import '3-util.dart';
+import 'dart:convert';
 
 Future<String> greetUser() async {
   try {
-    final userData = await fetchUserData();
-    // Parse JSON data and extract username
-    final Map<String, dynamic> userMap = json.decode(userData);
-    final String username = userMap['username'];
-    return 'Hello $username';
+    String user = await fetchUserData();
+    Map userMap = jsonDecode(user);
+    return 'Hello ${userMap['username']}';
   } catch (error) {
     return 'error caught: $error';
   }
@@ -15,13 +13,13 @@ Future<String> greetUser() async {
 
 Future<String> loginUser() async {
   try {
-    final credentialsValid = await checkCredentials();
+    bool hasValidCredential = await checkCredentials();
 
-    print('There is a user: $credentialsValid');
-
-    if (credentialsValid) {
-      return await greetUser();
+    if (hasValidCredential) {
+      print("There is a user: true");
+      return (await greetUser());
     } else {
+      print("There is a user: false");
       return 'Wrong credentials';
     }
   } catch (error) {
